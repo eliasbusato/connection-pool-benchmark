@@ -1,9 +1,7 @@
 package com.ebusato.connection.pool.benchmark.service;
 
 import com.ebusato.connection.pool.benchmark.model.Address;
-import com.ebusato.connection.pool.benchmark.model.Person;
 import com.ebusato.connection.pool.benchmark.repository.AddressRepository;
-import com.ebusato.connection.pool.benchmark.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

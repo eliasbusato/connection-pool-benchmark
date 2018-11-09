@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class BenchmarkTest {
+public abstract class BenchmarkTest {
 
     @Autowired
     private PersonService personService;
@@ -27,7 +27,7 @@ public class BenchmarkTest {
     private AddressService addressService;
 
     @Autowired
-    private DataSource dataSource;
+    protected DataSource dataSource;
 
     @Value("${person.table.size}")
     private Integer personTableSize;
@@ -35,13 +35,14 @@ public class BenchmarkTest {
     @Value("${person.address.size}")
     private Integer personAddressSize;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BenchmarkTest.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(BenchmarkTest.class);
 
     @Before
     public void initialize() {
         long startTime = System.currentTimeMillis();
         LOGGER.info("database setup initialized...");
         LOGGER.info("using [{}]", dataSource.getClass().getName());
+        this.logDataSourceInfo();
         LOGGER.info("saving {} person entries into database with {} adresses each...", personTableSize, personAddressSize);
         IntStream.rangeClosed(1, personTableSize).forEach(i -> {
             Person person = new Person(String.format("Person %d",i));
@@ -71,4 +72,6 @@ public class BenchmarkTest {
         });
         LOGGER.info("test finished! took [{}] ms", System.currentTimeMillis() - startTime);
     }
+
+    abstract void logDataSourceInfo();
 }
