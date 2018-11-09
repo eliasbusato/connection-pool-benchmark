@@ -26,4 +26,9 @@ public class AddressServiceImpl implements AddressService {
     public List<Address> list() {
         return addressRepository.findAll();
     }
+
+    @Override
+    public List<Address> findByStreet(String street) {
+        return addressRepository.findByStreet(street);
+    }
 }

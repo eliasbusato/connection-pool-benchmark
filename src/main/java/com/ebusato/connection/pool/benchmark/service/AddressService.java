@@ -9,4 +9,6 @@ public interface AddressService {
     Address save(Address a);
 
     List<Address> list();
+
+    List<Address> findByStreet(String street);
 }

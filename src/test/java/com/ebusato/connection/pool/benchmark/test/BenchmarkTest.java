@@ -35,6 +35,9 @@ public abstract class BenchmarkTest {
     @Value("${person.address.size}")
     private Integer personAddressSize;
 
+    @Value("${concurrent.clients}")
+    private Integer concurrentClients;
+
     protected static final Logger LOGGER = LoggerFactory.getLogger(BenchmarkTest.class);
 
     @Before
@@ -45,7 +48,7 @@ public abstract class BenchmarkTest {
         this.logDataSourceInfo();
         LOGGER.info("saving {} person entries into database with {} adresses each...", personTableSize, personAddressSize);
         IntStream.rangeClosed(1, personTableSize).forEach(i -> {
-            Person person = new Person(String.format("Person %d",i));
+            Person person = new Person(String.format("person %d",i));
             List<Address> addresses = IntStream.rangeClosed(1, personAddressSize)
                     .mapToObj(j -> new Address(person.getName().concat(" ").concat(String.format("address %d", j))))
                         .peek(a -> a.setPerson(person))
@@ -57,11 +60,14 @@ public abstract class BenchmarkTest {
     }
 
     public void execute() {
+        LOGGER.info("simulating {} concurrent clients running queries...", concurrentClients);
         long startTime = System.currentTimeMillis();
         final List<CompletableFuture<?>> futures = new ArrayList<>();
-        IntStream.rangeClosed(0, 100).forEach(i -> {
+        IntStream.rangeClosed(0, concurrentClients).forEach(i -> {
             futures.add(CompletableFuture.supplyAsync(() -> personService.list()));
             futures.add(CompletableFuture.supplyAsync(() -> addressService.list()));
+            futures.add(CompletableFuture.supplyAsync(() -> personService.findByName(String.format("person %d",personTableSize))));
+            futures.add(CompletableFuture.supplyAsync(() -> addressService.findByStreet(String.format("person %d address %d",1,personTableSize))));
         });
         futures.forEach(completableFuture -> {
             try {
