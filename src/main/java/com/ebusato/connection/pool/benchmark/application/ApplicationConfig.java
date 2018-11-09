@@ -19,7 +19,7 @@ public class ApplicationConfig {
 
     @Bean
     @Primary
-    @ConfigurationProperties("app.datasource")
+    @ConfigurationProperties("spring.datasource")
     public DataSourceProperties dataSourceProperties() {
         return new DataSourceProperties();
     }

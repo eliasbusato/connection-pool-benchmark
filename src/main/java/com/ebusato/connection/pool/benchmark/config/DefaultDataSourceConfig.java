@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 public class DefaultDataSourceConfig {
 
     @Bean
-    @ConfigurationProperties("app.datasource")
+    @ConfigurationProperties("spring.datasource")
     public DataSource dataSource(DataSourceProperties props) {
         return props.initializeDataSourceBuilder().build();
     }

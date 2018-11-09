@@ -22,6 +22,7 @@ public class TomcatJDBCBenchmarkTest extends BenchmarkTest {
     @Override
     void logDataSourceInfo() {
         DataSource ds = DataSource.class.cast(super.dataSource);
+        LOGGER.info("test on borrow: {}", ds.isTestOnBorrow());
         LOGGER.info("minimum idle: {}", ds.getMinIdle());
         LOGGER.info("maximum idle: {}", ds.getMaxIdle());
     }

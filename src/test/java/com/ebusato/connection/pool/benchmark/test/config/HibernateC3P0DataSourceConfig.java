@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 public class HibernateC3P0DataSourceConfig {
 
     @Bean
-    @ConfigurationProperties("spring.datasource")
+    @ConfigurationProperties("spring.datasource.c3p0")
     public DataSource dataSource(DataSourceProperties props) {
 
         return props.initializeDataSourceBuilder().type(ComboPooledDataSource.class).build();

@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 public class HikariDataSourceConfig {
 
     @Bean
-    @ConfigurationProperties("spring.datasource")
+    @ConfigurationProperties("spring.datasource.hikari")
     public DataSource dataSource(DataSourceProperties props) {
         return props.initializeDataSourceBuilder().type(HikariDataSource.class).build();
     }

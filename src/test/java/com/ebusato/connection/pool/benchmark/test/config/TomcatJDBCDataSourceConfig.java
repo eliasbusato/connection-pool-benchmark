@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 public class TomcatJDBCDataSourceConfig {
 
     @Bean
-    @ConfigurationProperties("spring.datasource")
+    @ConfigurationProperties("spring.datasource.tomcat")
     public DataSource dataSource(DataSourceProperties props) {
         return props.initializeDataSourceBuilder().type(org.apache.tomcat.jdbc.pool.DataSource.class).build();
     }

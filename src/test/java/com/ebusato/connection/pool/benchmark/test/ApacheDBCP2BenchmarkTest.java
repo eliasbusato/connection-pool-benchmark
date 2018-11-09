@@ -24,7 +24,9 @@ public class ApacheDBCP2BenchmarkTest extends BenchmarkTest {
     @Override
     void logDataSourceInfo() {
         BasicDataSource ds = BasicDataSource.class.cast(super.dataSource);
+        LOGGER.info("test on borrow: {}", ds.getTestOnBorrow());
         LOGGER.info("minimum idle: {}", ds.getMinIdle());
         LOGGER.info("maximum idle: {}", ds.getMaxIdle());
+
     }
 }
