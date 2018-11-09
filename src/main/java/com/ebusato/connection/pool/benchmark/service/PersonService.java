@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PersonService {
 
-    Person save(Person s);
+    Person save(Person p);
 
     List<Person> list();
 }
