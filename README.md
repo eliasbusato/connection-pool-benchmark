@@ -1,4 +1,13 @@
 # connection-pool-benchmark
+
+## configuration
+
+number of person entities to create
+```person.table.size```
+
+number of addresses per person
+```person.address.size```
+
 ## running tests
 
 #### Apache DBCP2
