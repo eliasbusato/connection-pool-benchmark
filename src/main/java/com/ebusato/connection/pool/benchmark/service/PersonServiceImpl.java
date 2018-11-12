@@ -24,6 +24,11 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public void truncate() {
+        this.personRepository.deleteAll();
+    }
+
+    @Override
     public List<Person> list() {
         return this.personRepository.findAll();
     }

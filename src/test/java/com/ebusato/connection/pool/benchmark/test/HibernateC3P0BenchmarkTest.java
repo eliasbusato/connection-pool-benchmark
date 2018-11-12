@@ -6,7 +6,6 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -14,14 +13,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class HibernateC3P0BenchmarkTest extends BenchmarkTest {
 
     @Test
-    @Sql("/truncate.sql")
     public void runTest() {
         super.execute();
     }
 
-
     @Override
-    void logDataSourceInfo() {
+    void setupDataSource() {
         ComboPooledDataSource ds = ComboPooledDataSource.class.cast(super.dataSource);
         LOGGER.info("minimum size: {}", ds.getMinPoolSize());
         LOGGER.info("maximum size: {}", ds.getMaxPoolSize());

@@ -8,6 +8,8 @@ public interface PersonService {
 
     Person save(Person p);
 
+    void truncate();
+
     List<Person> list();
 
     List<Person> findByName(String name);

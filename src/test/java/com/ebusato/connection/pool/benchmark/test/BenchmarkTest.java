@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -42,17 +43,42 @@ public abstract class BenchmarkTest {
 
     @Before
     public void initialize() {
-        long startTime = System.currentTimeMillis();
         LOGGER.info("database setup initialized...");
         LOGGER.info("using [{}]", dataSource.getClass().getName());
-        this.logDataSourceInfo();
+        this.warmUp();
+        this.setupDataSource();
+        this.cleanDatabase();
+        this.setupData();
+    }
+
+    private void warmUp() {
+        try {
+            // forces internal pool creation
+            this.dataSource.getLogWriter();
+        } catch (SQLException e) {
+            // hikari doesn't like it :(
+            //throw new RuntimeException(e);
+        }
+    }
+
+
+    private void cleanDatabase() {
+        long startTime = System.currentTimeMillis();
+        LOGGER.info("cleaning database...");
+        this.personService.truncate();
+        LOGGER.info("database cleaning up finished! took [{}] ms", System.currentTimeMillis() - startTime);
+
+    }
+
+    private void setupData() {
+        long startTime = System.currentTimeMillis();
         LOGGER.info("saving {} person entries into database with {} adresses each...", personTableSize, personAddressSize);
         IntStream.rangeClosed(1, personTableSize).forEach(i -> {
             Person person = new Person(String.format("person %d",i));
             List<Address> addresses = IntStream.rangeClosed(1, personAddressSize)
                     .mapToObj(j -> new Address(person.getName().concat(" ").concat(String.format("address %d", j))))
-                        .peek(a -> a.setPerson(person))
-                            .collect(Collectors.toList());
+                    .peek(a -> a.setPerson(person))
+                    .collect(Collectors.toList());
             person.setAddresses(addresses);
             personService.save(person);
         });
@@ -79,5 +105,5 @@ public abstract class BenchmarkTest {
         LOGGER.info("test finished! took [{}] ms", System.currentTimeMillis() - startTime);
     }
 
-    abstract void logDataSourceInfo();
+    abstract void setupDataSource();
 }

@@ -14,7 +14,6 @@ public class ApacheDBCP2DataSourceConfig {
     @Bean
     @ConfigurationProperties("spring.datasource.dbcp2")
     public DataSource dataSource(DataSourceProperties props) {
-
         return props.initializeDataSourceBuilder().type(BasicDataSource.class).build();
     }
 }
